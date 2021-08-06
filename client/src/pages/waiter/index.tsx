@@ -133,6 +133,95 @@ const WaiterIndex = () => {
         setShowModalProductsOrder(true);
     };
 
+    const handleModalBtnPlus = (productData: any) => {
+        const copyProductsOrder = [...productsOrder];
+        const copyProducts = [...products];
+
+        const findIndexProductOrder = copyProductsOrder.findIndex(
+            (theProduct: any) => theProduct.id === productData.id
+        );
+        const findIndexProduct = copyProducts.findIndex(
+            (theProduct: any) => theProduct.id === productData.id
+        );
+
+        if (findIndexProductOrder === -1)
+            return toast.error("No esta este producto en la lista");
+        else if (findIndexProduct === -1)
+            return toast.error("No existe este producto");
+
+        const theProductOrder = copyProductsOrder[findIndexProductOrder];
+        const theProduct = copyProducts[findIndexProduct];
+
+        if (theProductOrder.quantityProduct > theProductOrder.quantity) {
+            theProductOrder.quantity += 1;
+            theProduct.quantity -= 1;
+
+            setProducts(copyProducts);
+            setProductsOrder(copyProductsOrder);
+            toast.success(`Se agrego una unidad a ${productData.name}`);
+            return;
+        }
+
+        toast.error(`No puedes agregar mas cantidad a ${productData.name}`);
+    };
+
+    const handleModalBtnMinus = (productData: any) => {
+        const copyProductsOrder = [...productsOrder];
+        const copyProducts = [...products];
+
+        const findIndexProductOrder = copyProductsOrder.findIndex(
+            (theProduct: any) => theProduct.id === productData.id
+        );
+        const findIndexProduct = copyProducts.findIndex(
+            (theProduct: any) => theProduct.id === productData.id
+        );
+
+        if (findIndexProductOrder === -1)
+            return toast.error("No esta este producto en la lista");
+        else if (findIndexProduct === -1)
+            return toast.error("No existe este producto");
+
+        const theProductOrder = copyProductsOrder[findIndexProductOrder];
+        const theProduct = copyProducts[findIndexProduct];
+
+        if (theProductOrder.quantity > 1) {
+            theProductOrder.quantity -= 1;
+            theProduct.quantity += 1;
+
+            setProducts(copyProducts);
+            setProductsOrder(copyProductsOrder);
+            toast.success(`Se elimino una unidad a ${productData.name}`);
+            return;
+        }
+
+        toast.error(
+            `No puedes seleccionar menos de 1 cantidad a ${productData.name}`
+        );
+    };
+
+    const handleModalBtnRemove = (productData: any) => {
+        const copyProducts = [...products];
+        const copyProductsOrder = [...productsOrder];
+
+        const findIndexProduct = copyProducts.findIndex(
+            (theProduct: any) => theProduct.id === productData.id
+        );
+
+        if (findIndexProduct === -1)
+            return toast.error("Producto no encontrado");
+
+        copyProducts[findIndexProduct].quantity = productData.quantityProduct;
+
+        const filtingProductsOrder = copyProductsOrder.filter(
+            (theProduct: any) => theProduct.id !== productData.id
+        );
+
+        setProductsOrder(filtingProductsOrder);
+        setProducts(copyProducts);
+
+        return toast.success("Product removido de la orden");
+    };
+
     return (
         <>
             <div className="mb-3">
@@ -181,7 +270,12 @@ const WaiterIndex = () => {
                 show={showModalProductsOrder}
                 setShow={setShowModalProductsOrder}
             >
-                <ModalProductsOrder productsList={productsOrder} />
+                <ModalProductsOrder
+                    productsList={productsOrder}
+                    onClickMinus={handleModalBtnMinus}
+                    onClickPlus={handleModalBtnPlus}
+                    onClickRemove={handleModalBtnRemove}
+                />
             </ModalContainer>
         </>
     );
