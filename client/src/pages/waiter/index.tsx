@@ -216,6 +216,11 @@ const WaiterIndex = () => {
             (theProduct: any) => theProduct.id !== productData.id
         );
 
+        console.log(filtingProductsOrder);
+
+        if (filtingProductsOrder[0] === undefined)
+            setShowModalProductsOrder(false);
+
         setProductsOrder(filtingProductsOrder);
         setProducts(copyProducts);
 
