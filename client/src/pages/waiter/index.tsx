@@ -227,6 +227,21 @@ const WaiterIndex = () => {
         return toast.success("Product removido de la orden");
     };
 
+    const modalHandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        const $tableNum = formData.get("table_num").toString();
+        const $message = formData.get("message").toString();
+
+        if (!$tableNum)
+            return toast.error("Por favor ingrese un numero de mesa");
+
+        console.log($tableNum);
+        console.log($message);
+    };
+
     return (
         <>
             <div className="mb-3">
@@ -280,6 +295,7 @@ const WaiterIndex = () => {
                     onClickMinus={handleModalBtnMinus}
                     onClickPlus={handleModalBtnPlus}
                     onClickRemove={handleModalBtnRemove}
+                    onSubmit={modalHandleSubmit}
                 />
             </ModalContainer>
         </>

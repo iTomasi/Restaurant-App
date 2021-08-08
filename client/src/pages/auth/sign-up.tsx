@@ -1,12 +1,23 @@
 import React from "react";
 
+// Next
+import { useRouter } from "next/router";
+
 // Components
 import FormSection from "components/form/FormSection";
 import Button from "components/Button";
 import { toast } from "react-hot-toast";
 
+// Axios
+import registerUser from "axiosSrc/auth/registerUser";
+
+// Interface (types)
+import { IRegisterUser } from "types/User";
+
 const SignUp = () => {
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -20,7 +31,18 @@ const SignUp = () => {
         else if (password !== confirm_password)
             return toast.error("Tus contrasenas no coinciden");
 
-        toast.success("Pro!");
+        const payload: IRegisterUser = {
+            username,
+            password,
+            confirm_password,
+        };
+
+        const { error, success } = await registerUser(payload);
+
+        if (error) return toast.error(error);
+
+        toast.success(success);
+        router.push("/auth/sign-in");
     };
 
     return (

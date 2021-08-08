@@ -1,12 +1,21 @@
 import React from "react";
+import { ILoginUser } from "types/User";
+
+// Next
+import { useRouter } from "next/router";
 
 // Components
 import FormSection from "components/form/FormSection";
 import Button from "components/Button";
 import { toast } from "react-hot-toast";
 
+// Axios
+import loginUser from "axiosSrc/auth/loginUser";
+
 const SignIn = () => {
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -17,14 +26,24 @@ const SignIn = () => {
         if (!username) return toast.error("Usuario vacio");
         else if (!password) return toast.error("Password vacio");
 
-        toast.success("PROO");
+        const payload: ILoginUser = {
+            username,
+            password,
+        };
+
+        const { error, success } = await loginUser(payload);
+
+        if (error) return toast.error(error);
+
+        toast.success(success);
+        router.push("/");
     };
 
     return (
         <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
             <FormSection title="Username" name="username" />
 
-            <FormSection title="Password" name="password" />
+            <FormSection type="password" title="Password" name="password" />
 
             <Button type="submit" text="Log In" />
         </form>

@@ -3,11 +3,15 @@ import React from "react";
 // Next
 import Image from "next/image";
 
+// Components
+import Button from "../Button";
+
 interface IModalProductsOrder {
     productsList: any[];
     onClickPlus: any;
     onClickMinus: any;
     onClickRemove: any;
+    onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
 const ModalProductsOrder = ({
@@ -15,9 +19,8 @@ const ModalProductsOrder = ({
     onClickPlus,
     onClickMinus,
     onClickRemove,
+    onSubmit,
 }: IModalProductsOrder) => {
-    console.log(productsList);
-
     return (
         <div className="bg-gray-800 w-11/12 max-w-3xl max-h-96 overflow-y-auto py-3 rounded px-5">
             {productsList.map((product: any, index: any) => (
@@ -63,6 +66,25 @@ const ModalProductsOrder = ({
                     </button>
                 </div>
             ))}
+
+            <form className="flex flex-col items-center" onSubmit={onSubmit}>
+                <input
+                    className="w-11/12 p-2 focus:outline-none mb-3 bg-gray-700 rounded"
+                    type="text"
+                    placeholder="Mesa"
+                    name="table_num"
+                />
+
+                <textarea
+                    className="resize-y h-24 w-11/12 p-2 focus:outline-none mb-3 bg-gray-700 rounded"
+                    placeholder="Mensaje..."
+                    name="message"
+                ></textarea>
+
+                <div className="w-11/12">
+                    <Button type="submit" text="Enviar orden" />
+                </div>
+            </form>
         </div>
     );
 };
