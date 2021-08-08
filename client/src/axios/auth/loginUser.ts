@@ -13,6 +13,7 @@ const loginUser = async (userData: ILoginUser) => {
 
         return {
             success: "Authenticado redirigiendo por favor espere",
+            data: data.userData,
         };
     } catch (e) {
         console.log(e);

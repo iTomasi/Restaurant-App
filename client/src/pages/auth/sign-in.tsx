@@ -12,8 +12,13 @@ import { toast } from "react-hot-toast";
 // Axios
 import loginUser from "axiosSrc/auth/loginUser";
 
+// Redux
+import { useDispatch } from "react-redux";
+import { userIsLoggin } from "reduxSrc/user/userState";
+
 const SignIn = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,9 +36,11 @@ const SignIn = () => {
             password,
         };
 
-        const { error, success } = await loginUser(payload);
+        const { error, success, data } = await loginUser(payload);
 
         if (error) return toast.error(error);
+
+        dispatch(userIsLoggin(data));
 
         toast.success(success);
         router.push("/");

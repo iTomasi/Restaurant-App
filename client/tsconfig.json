@@ -21,7 +21,9 @@
     "paths": {
       "components/*": ["src/components/*"],
       "axiosSrc/*": ["src/axios/*"],
-      "types/*": ["src/types/*"]
+      "types/*": ["src/types/*"],
+      "reduxSrc/*": ["src/redux/*"],
+      "libs/*": ["src/libs/*"]
     }
   },
   "include": [

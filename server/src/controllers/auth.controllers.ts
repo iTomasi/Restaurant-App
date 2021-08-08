@@ -6,6 +6,15 @@ import config from "../config/config";
 // Models
 import Account from "../models/Account";
 
+// Libs
+import getUser from "../libs/getUser";
+
+export const GET_isAuthenticated: Handler = (req, res) => {
+    const theUser = getUser(req.user);
+
+    return res.json(theUser);
+};
+
 export const POST_signUp: Handler = async (req, res) => {
     const { username, password, confirm_password } = req.body;
 
@@ -75,7 +84,9 @@ export const POST_signIn: Handler = async (req, res) => {
             { expiresIn: 86400 }
         );
 
-        res.json({ message: "OK", token });
+        const theUser = getUser(user);
+
+        res.json({ message: "OK", token, userData: theUser });
     } catch (e) {
         console.log(e);
         console.log("POST_signIn() Error");

@@ -11,6 +11,7 @@ const accountSchema = new Schema({
     username: { type: String },
     username_lower: { type: String },
     password: { type: String },
+    picture: { type: String, default: "default.jpg" },
     rols: { type: Array, default: ["user"] },
 });
 
