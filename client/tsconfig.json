@@ -23,7 +23,8 @@
       "axiosSrc/*": ["src/axios/*"],
       "types/*": ["src/types/*"],
       "reduxSrc/*": ["src/redux/*"],
-      "libs/*": ["src/libs/*"]
+      "libs/*": ["src/libs/*"],
+      "routes/*": ["src/routes/*"]
     }
   },
   "include": [

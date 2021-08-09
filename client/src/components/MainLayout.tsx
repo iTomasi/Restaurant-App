@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
+// Components
+import LottieLoader from "./LottieLoader";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -11,17 +14,26 @@ interface IMainLayoutProps {
 const MainLayout = ({ children }: IMainLayoutProps) => {
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
         const effectFunc = async () => {
             const userAuthenticated = await isUserAuthenticated();
 
             dispatch(userAuthenticated);
+
+            setLoading(false);
         };
 
         effectFunc();
     }, []);
 
-    return <>{children}</>;
+    return (
+        <>
+            {loading && <LottieLoader />}
+            {children}
+        </>
+    );
 };
 
 export default MainLayout;

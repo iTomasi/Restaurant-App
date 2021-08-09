@@ -302,4 +302,6 @@ const WaiterIndex = () => {
     );
 };
 
+WaiterIndex.requireWaiterRol = true;
+
 export default WaiterIndex;
