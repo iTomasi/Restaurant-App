@@ -25,8 +25,10 @@ const WaiterRoute = ({ children }: IWaiterRouteProps) => {
 
         if (
             !userData.data.rols.includes("waiter") &&
-            !userData.data.rols.includes("admin")
+            !userData.data.rols.includes("admin") &&
+            userData.data._id !== "0"
         ) {
+            console.log("???");
             router.push("/");
             return;
         }
