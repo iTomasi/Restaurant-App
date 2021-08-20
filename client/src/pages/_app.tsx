@@ -8,6 +8,7 @@ import MainLayout from "components/MainLayout";
 // Routes
 import AuthRoute from "routes/AuthRoute";
 import WaiterRoute from "routes/WaiterRoute";
+import AdminRoute from "routes/AdminRoute";
 
 // Redux
 import { Provider } from "react-redux";
@@ -19,7 +20,7 @@ const App = ({ Component, pageProps }) => {
             <MainLayout>
                 <Toaster />
                 <Header />
-                <div className="w-full px-2 max-w-4xl mx-auto">
+                <div className="w-full px-2 max-w-4xl mx-auto pb-5">
                     {Component.requireAuth ? (
                         <AuthRoute>
                             <Component {...pageProps} />
@@ -28,6 +29,10 @@ const App = ({ Component, pageProps }) => {
                         <WaiterRoute>
                             <Component {...pageProps} />
                         </WaiterRoute>
+                    ) : Component.requireAdminRol ? (
+                        <AdminRoute>
+                            <Component {...pageProps} />
+                        </AdminRoute>
                     ) : (
                         <Component {...pageProps} />
                     )}

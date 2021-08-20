@@ -1,11 +1,15 @@
 import React from "react";
 
+// Config
+import jobs from "config/jobs";
+
 // Next
 import { useRouter } from "next/router";
 
 // Components
 import Button from "components/Button";
 import removeCookie from "libs/removeCookie";
+import Job from "components/home/Job";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -25,8 +29,9 @@ const Index = () => {
 
         return (
             <div>
-                {userData.data.rols.length === 1 &&
-                userData.data.rols.includes("user") ? (
+                {(userData.data.rols.length === 1 &&
+                    userData.data.rols.includes("user")) ||
+                userData.data.rols[0] === undefined ? (
                     <>
                         <p className="mb-3 text-center">
                             No tienes ningun rol de trabajador, en caso de que
@@ -39,6 +44,26 @@ const Index = () => {
                         <p className="mb-3 text-center">
                             Bienvenido a la aplicacion Puerto Castilla!
                         </p>
+
+                        <div className="mb-5">
+                            {jobs.map((job, index) => {
+                                if (
+                                    userData.data.rols.includes(
+                                        job.rol.toLowerCase()
+                                    ) ||
+                                    userData.data.rols.includes("admin")
+                                ) {
+                                    return (
+                                        <Job
+                                            key={index}
+                                            img={job.img}
+                                            name={job.name}
+                                            path={job.path}
+                                        />
+                                    );
+                                }
+                            })}
+                        </div>
                     </>
                 )}
 

@@ -24,7 +24,8 @@
       "types/*": ["src/types/*"],
       "reduxSrc/*": ["src/redux/*"],
       "libs/*": ["src/libs/*"],
-      "routes/*": ["src/routes/*"]
+      "routes/*": ["src/routes/*"],
+      "config/*": ["src/config/*"]
     }
   },
   "include": [

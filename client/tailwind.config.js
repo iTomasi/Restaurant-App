@@ -5,7 +5,11 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {},
+        extend: {
+            maxHeight: {
+                modal: "500px",
+            },
+        },
     },
     variants: {
         extend: {},
