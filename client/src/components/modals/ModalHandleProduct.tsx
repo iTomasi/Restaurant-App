@@ -12,20 +12,65 @@ import { IProduct } from "types/Product";
 
 // Config
 import adminCfg from "config/admin";
+import cloudinaryCfg from "config/cloudinary";
+
+// Axios
+import Axios from "axios";
+import addProduct from "axiosSrc/products/addProduct";
 
 interface IModalHandleProductProps {
     product: IProduct;
     setProduct: any;
+    setShowModal: any;
 }
 
 const ModalHandleProduct = ({
     product,
     setProduct,
+    setShowModal,
 }: IModalHandleProductProps) => {
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(product);
+        try {
+            if (product.type === "add") {
+                const formData = new FormData();
+                formData.append("upload_preset", cloudinaryCfg.UPLOAD_PRESET);
+                formData.append("file", product.fileBlob);
+                formData.append("folder", "products");
+
+                const { data } = await Axios.post(
+                    cloudinaryCfg.BASE_URL + "/image/upload",
+                    formData,
+                    {
+                        headers: { "Content-Type": "multipart/form-data" },
+                        onUploadProgress: (e) => {
+                            const percentage = Math.round(
+                                (e.loaded * 100) / e.total
+                            );
+
+                            console.log(percentage);
+                        },
+                    }
+                );
+
+                const { error, success } = await addProduct({
+                    name: product.name,
+                    price: product.price,
+                    category: product.category,
+                    img: data.secure_url,
+                    quantity: product.quantity,
+                });
+
+                if (error) return toast.error(error);
+
+                toast.success(success);
+                setShowModal(false);
+            }
+        } catch (e) {
+            console.log(e);
+            console.log("ModalHandleProduct error");
+        }
     };
 
     const handleOnChange = (e: any) => {
@@ -100,7 +145,9 @@ const ModalHandleProduct = ({
                 title="Categoria"
                 onChange={handleOnChangeSelect}
             >
-                <option disabled>Selecciona una categoria</option>
+                <option disabled selected>
+                    Selecciona una categoria
+                </option>
                 {adminCfg.productCategories.map((category, index) =>
                     product.category === "" ||
                     product.category !== category.value ? (

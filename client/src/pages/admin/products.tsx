@@ -48,7 +48,11 @@ const Products = () => {
             </div>
 
             <ModalContainer show={showModal} setShow={setShowModal}>
-                <ModalHandleProduct product={product} setProduct={setProduct} />
+                <ModalHandleProduct
+                    product={product}
+                    setProduct={setProduct}
+                    setShowModal={setShowModal}
+                />
             </ModalContainer>
         </>
     );

@@ -27,7 +27,7 @@ const ProductCard = ({
         if (quantity <= 0) return toast.error("No quedan mas " + name);
 
         onClickProduct({
-            id,
+            _id: id,
             name,
             img,
             price,

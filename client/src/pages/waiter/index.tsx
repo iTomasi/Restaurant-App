@@ -1,28 +1,4 @@
-import React, { useState, useCallback } from "react";
-
-const temporalArray = [
-    {
-        id: "0",
-        img: "/coca-cola.jpg",
-        name: "Coca Cola",
-        quantity: 10,
-        price: 500,
-    },
-    {
-        id: "1",
-        img: "/coca-cola.jpg",
-        name: "Colax Cola 1",
-        quantity: 20,
-        price: 700,
-    },
-    {
-        id: "2",
-        img: "/coca-cola.jpg",
-        name: "kokalol Cola 2",
-        quantity: 0,
-        price: 800,
-    },
-];
+import React, { useState, useCallback, useEffect } from "react";
 
 // Components
 import ProductCard from "components/waiter/ProductCard";
@@ -33,20 +9,38 @@ import ModalProductsOrder from "components/modals/ModalProductsOrder";
 import ButtonCircle from "components/ButtonCircle";
 import { toast } from "react-hot-toast";
 
+// Axios
+import getProducts from "axiosSrc/products/getProducts";
+import insertOrder from "axiosSrc/waiters/insertOrder";
+
 const WaiterIndex = () => {
-    const [products, setProducts] = useState<any[]>(temporalArray);
+    const [products, setProducts] = useState<any[]>([]);
     const [inputSearch, setInputSearch] = useState<string>("");
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showModalProductsOrder, setShowModalProductsOrder] =
         useState<boolean>(false);
     const [productSelected, setProductSelected] = useState({
-        id: "",
+        _id: "",
         img: "",
         name: "",
-        quantityProduct: 0,
+        quantity: 0,
     });
 
     const [productsOrder, setProductsOrder] = useState<any[]>([]);
+
+    useEffect(() => {
+        const effectFunc = async () => {
+            const { data, error } = await getProducts();
+
+            if (error) return toast.error(error);
+
+            console.log(data);
+
+            setProducts(data);
+        };
+
+        effectFunc();
+    }, []);
 
     const handleOnChangeSearchValue = useCallback(
         (value: any) => setInputSearch(value),
@@ -71,12 +65,13 @@ const WaiterIndex = () => {
     };
 
     const handleProductCard = (productData: any) => {
+        console.log(productData);
         setProductSelected((prev) => ({
             ...prev,
-            id: productData.id,
+            _id: productData._id,
             img: productData.img,
             name: productData.name,
-            quantityProduct: productData.quantity,
+            quantity: productData.quantity,
         }));
         setShowModal(true);
     };
@@ -92,10 +87,10 @@ const WaiterIndex = () => {
         const copyProducts = [...products];
 
         const findIndexProductOrder = copyProductOrder.findIndex(
-            (theProduct: any) => theProduct.id === id
+            (theProduct: any) => theProduct._id === id
         );
         const findIndexProduct = copyProducts.findIndex(
-            (theProduct: any) => theProduct.id === id
+            (theProduct: any) => theProduct._id === id
         );
 
         if (findIndexProductOrder === -1) {
@@ -106,7 +101,7 @@ const WaiterIndex = () => {
             setProductsOrder((prev: any) => [
                 ...prev,
                 {
-                    id,
+                    _id: id,
                     name,
                     img,
                     quantityProduct,
@@ -138,10 +133,10 @@ const WaiterIndex = () => {
         const copyProducts = [...products];
 
         const findIndexProductOrder = copyProductsOrder.findIndex(
-            (theProduct: any) => theProduct.id === productData.id
+            (theProduct: any) => theProduct._id === productData._id
         );
         const findIndexProduct = copyProducts.findIndex(
-            (theProduct: any) => theProduct.id === productData.id
+            (theProduct: any) => theProduct._id === productData._id
         );
 
         if (findIndexProductOrder === -1)
@@ -170,10 +165,10 @@ const WaiterIndex = () => {
         const copyProducts = [...products];
 
         const findIndexProductOrder = copyProductsOrder.findIndex(
-            (theProduct: any) => theProduct.id === productData.id
+            (theProduct: any) => theProduct._id === productData._id
         );
         const findIndexProduct = copyProducts.findIndex(
-            (theProduct: any) => theProduct.id === productData.id
+            (theProduct: any) => theProduct._id === productData._id
         );
 
         if (findIndexProductOrder === -1)
@@ -200,11 +195,12 @@ const WaiterIndex = () => {
     };
 
     const handleModalBtnRemove = (productData: any) => {
+        console.log(productData);
         const copyProducts = [...products];
         const copyProductsOrder = [...productsOrder];
 
         const findIndexProduct = copyProducts.findIndex(
-            (theProduct: any) => theProduct.id === productData.id
+            (theProduct: any) => theProduct._id === productData._id
         );
 
         if (findIndexProduct === -1)
@@ -213,7 +209,7 @@ const WaiterIndex = () => {
         copyProducts[findIndexProduct].quantity = productData.quantityProduct;
 
         const filtingProductsOrder = copyProductsOrder.filter(
-            (theProduct: any) => theProduct.id !== productData.id
+            (theProduct: any) => theProduct._id !== productData._id
         );
 
         console.log(filtingProductsOrder);
@@ -227,7 +223,7 @@ const WaiterIndex = () => {
         return toast.success("Product removido de la orden");
     };
 
-    const modalHandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const modalHandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
@@ -240,6 +236,16 @@ const WaiterIndex = () => {
 
         console.log($tableNum);
         console.log($message);
+
+        const { error } = await insertOrder(
+            productsOrder,
+            $tableNum,
+            !$message ? "" : $message
+        );
+
+        if (error) return toast.error(error);
+
+        console.log("Pro");
     };
 
     return (
@@ -259,7 +265,7 @@ const WaiterIndex = () => {
                             .includes(inputSearch.toLowerCase()) && (
                             <ProductCard
                                 key={index}
-                                id={product.id}
+                                id={product._id}
                                 name={product.name}
                                 img={product.img}
                                 price={product.price}
@@ -277,10 +283,10 @@ const WaiterIndex = () => {
 
             <ModalContainer show={showModal} setShow={setShowModal}>
                 <ModalProductSelected
-                    id={productSelected.id}
+                    id={productSelected._id}
                     img={productSelected.img}
                     name={productSelected.name}
-                    quantityProduct={productSelected.quantityProduct}
+                    quantityProduct={productSelected.quantity}
                     onClickCancel={() => setShowModal(false)}
                     onClickAdd={getProductAdded}
                 />

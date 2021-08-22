@@ -30,6 +30,7 @@ const ModalProductSelected = ({
     }, [img, name, quantityProduct, id]);
 
     const handlePlusBtn = () => {
+        console.log(quantityProduct);
         if (quantityProduct > quantity) {
             return setQuantity(quantity + 1);
         }
