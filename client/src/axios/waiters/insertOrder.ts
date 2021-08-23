@@ -26,7 +26,9 @@ const insertOrder = async (
             }
         );
 
-        console.log(data);
+        if (data.message !== "OK") return { error: data.message };
+
+        return { success: "Nice" };
     } catch (e) {
         console.log(e);
         console.log("insertORder error");

@@ -10,6 +10,7 @@ interface IModalProductSelectedProps {
     id: string;
     img: string;
     name: string;
+    category: string;
     quantityProduct: number;
     onClickCancel: React.MouseEventHandler<HTMLButtonElement>;
     onClickAdd: any;
@@ -19,6 +20,7 @@ const ModalProductSelected = ({
     id,
     img,
     name,
+    category,
     quantityProduct,
     onClickCancel,
     onClickAdd,
@@ -27,7 +29,7 @@ const ModalProductSelected = ({
 
     useEffect(() => {
         setQuantity(1);
-    }, [img, name, quantityProduct, id]);
+    }, [img, name, quantityProduct, id, category]);
 
     const handlePlusBtn = () => {
         console.log(quantityProduct);
@@ -43,7 +45,7 @@ const ModalProductSelected = ({
     };
 
     const handleAcceptBtn = () =>
-        onClickAdd({ id, name, img, quantityProduct, quantity });
+        onClickAdd({ id, name, img, quantityProduct, category, quantity });
 
     return (
         <div className="w-full max-w-xl px-2">

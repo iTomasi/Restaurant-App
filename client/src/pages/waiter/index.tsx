@@ -23,10 +23,13 @@ const WaiterIndex = () => {
         _id: "",
         img: "",
         name: "",
+        category: "",
         quantity: 0,
     });
 
     const [productsOrder, setProductsOrder] = useState<any[]>([]);
+
+    console.log(productsOrder);
 
     useEffect(() => {
         const effectFunc = async () => {
@@ -71,6 +74,7 @@ const WaiterIndex = () => {
             _id: productData._id,
             img: productData.img,
             name: productData.name,
+            category: productData.category,
             quantity: productData.quantity,
         }));
         setShowModal(true);
@@ -81,6 +85,7 @@ const WaiterIndex = () => {
         name,
         img,
         quantityProduct,
+        category,
         quantity,
     }: any) => {
         const copyProductOrder = [...productsOrder];
@@ -104,6 +109,7 @@ const WaiterIndex = () => {
                     _id: id,
                     name,
                     img,
+                    category,
                     quantityProduct,
                     quantity,
                 },
@@ -245,7 +251,10 @@ const WaiterIndex = () => {
 
         if (error) return toast.error(error);
 
-        console.log("Pro");
+        setProductsOrder([]);
+        setShowModalProductsOrder(false);
+
+        toast.success("Orden enviada con exito!");
     };
 
     return (
@@ -267,6 +276,7 @@ const WaiterIndex = () => {
                                 key={index}
                                 id={product._id}
                                 name={product.name}
+                                category={product.category}
                                 img={product.img}
                                 price={product.price}
                                 quantity={product.quantity}
@@ -287,6 +297,7 @@ const WaiterIndex = () => {
                     img={productSelected.img}
                     name={productSelected.name}
                     quantityProduct={productSelected.quantity}
+                    category={productSelected.category}
                     onClickCancel={() => setShowModal(false)}
                     onClickAdd={getProductAdded}
                 />

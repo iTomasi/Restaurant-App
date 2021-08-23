@@ -10,6 +10,7 @@ interface IProductCardProps {
     id: string;
     img: string;
     name: string;
+    category: string;
     price: number;
     quantity: number;
     onClickProduct: any;
@@ -19,6 +20,7 @@ const ProductCard = ({
     id,
     img,
     name,
+    category,
     price,
     quantity,
     onClickProduct,
@@ -29,6 +31,7 @@ const ProductCard = ({
         onClickProduct({
             _id: id,
             name,
+            category,
             img,
             price,
             quantity,
